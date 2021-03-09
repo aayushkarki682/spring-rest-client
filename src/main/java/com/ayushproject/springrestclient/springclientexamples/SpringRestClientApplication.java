@@ -1,4 +1,4 @@
-package com.ayushproject.springrestclient;
+package com.ayushproject.springrestclient.springclientexamples;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
