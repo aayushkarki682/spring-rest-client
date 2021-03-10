@@ -2,8 +2,11 @@ package com.ayushproject.springrestclient.springclientexamples.services;
 
 import com.ayushproject.springrestclient.model.User;
 import com.ayushproject.springrestclient.model.UserData;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -12,13 +15,21 @@ public class ApiServiceImpl implements ApiService{
 
     private RestTemplate restTemplate;
 
-    public ApiServiceImpl(RestTemplate restTemplate) {
+    private final String api_url;
+
+    public ApiServiceImpl(RestTemplate restTemplate, @Value("${api.url}") String api_url) {
+
         this.restTemplate = restTemplate;
+        this.api_url = api_url;
     }
 
     @Override
     public List<User> getUsers(Integer limit) {
-        UserData userData = restTemplate.getForObject("http://private-9867f-apifaketory.apiary-mock.com/api/user?limit="+limit, UserData.class);
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(api_url)
+                .queryParam("limit", limit);
+
+        UserData userData = restTemplate.getForObject(uriBuilder.toUriString(), UserData.class);
         return userData.getData();
     }
 }
